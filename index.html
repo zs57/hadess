@@ -137,8 +137,11 @@
                     const response = await fetch(url);
                     const result = await response.json();
                     if (result.status === 'success') { renderCards(result.data); }
-                    else { showError(result.message || "فشل تحميل البيانات"); }
-                } catch (error) { showError("خطأ في الاتصال بالسيرفر أو قاعدة البيانات."); }
+                    else { showError("خطأ من السيرفر: " + result.message); }
+                } catch (error) { 
+                    showError("فشل تقني: " + error.message); 
+                    console.error(error);
+                }
             }
 
             function renderCards(hadiths) {
