@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موسوعة الحديث الشريف | بوابة الدخول</title>
+    <title>منصة السنة النبوية | المشروع الاحترافي</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@400;600;700;900&display=swap');
@@ -28,104 +28,135 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Cairo", sans-serif; transition: 0.3s; }
         body { background: var(--paper); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
 
-        /* ====== GATEWAY OVERLAY ====== */
+        /* ====== GATEWAY / ONBOARDING ====== */
         #gateway {
             position: fixed; inset: 0; background: var(--paper); z-index: 2000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 2rem; text-align: center; overflow-y: auto;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding: 3rem 2rem; overflow-y: auto;
         }
-        #gateway.fade-out { transform: translateY(-100%); opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        #gateway.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; transition: 1s cubic-bezier(0.19, 1, 0.22, 1); }
 
-        .gateway-title { font-family: "Amiri", serif; font-size: clamp(2.5rem, 6vw, 4rem); color: var(--accent-red); margin-bottom: 1rem; }
-        .gateway-sub { font-size: 1.2rem; color: var(--ink); opacity: 0.8; margin-bottom: 3rem; font-weight: 700; }
+        .gateway-title { font-family: "Amiri", serif; font-size: 4rem; color: var(--accent-red); margin-bottom: 1rem; }
+        @media (max-width: 768px) { .gateway-title { display: none; } } /* إخفاء في الهاتف */
 
-        .book-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem; width: 100%; max-width: 1100px;
+        .features-intro {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem; width: 100%; max-width: 1000px; margin: 2rem 0 4rem;
         }
-        .book-card {
-            background: #fff; border: 2px solid var(--ink); border-radius: 15px; padding: 2rem;
-            cursor: pointer; box-shadow: 5px 5px 0 var(--ink); transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; gap: 1rem;
-        }
-        .book-card:hover { transform: translateY(-10px); background: var(--highlight); }
-        .book-card i { font-size: 2.5rem; color: var(--accent-red); }
+        .feat-item { text-align: center; padding: 1.5rem; border: 2px dashed var(--border); border-radius: 20px; }
+        .feat-item i { font-size: 2.5rem; color: var(--accent-green); margin-bottom: 10px; }
 
-        /* ====== MAIN CONTENT (HIDDEN INITIALLY) ====== */
+        .action-bars { display: flex; gap: 1rem; margin-bottom: 3rem; }
+        .btn-main { background: var(--ink); color: white; border: 2px solid var(--ink); padding: 1rem 2.5rem; border-radius: 50px; cursor: pointer; font-weight: 800; box-shadow: 4px 4px 0 var(--accent-red); }
+        .btn-dev { background: transparent; color: var(--ink); border: 2px solid var(--ink); padding: 1rem 2.5rem; border-radius: 50px; cursor: pointer; font-weight: 800; }
+
+        /* ====== DEVELOPER PORTAL ====== */
+        #dev-portal {
+            position: fixed; inset: 0; background: #111; color: #10b981; z-index: 2100;
+            display: none; flex-direction: column; padding: 4rem 2rem; overflow-y: auto; font-family: monospace;
+        }
+        .code-block { background: #222; padding: 1.5rem; border-radius: 15px; border-left: 5px solid #10b981; margin: 2rem 0; overflow-x: auto; }
+
+        /* ====== MAIN CONTENT ====== */
         nav {
             position:fixed; top:0; left:0; right:0; z-index:1000; padding:0.8rem 2.5rem;
             display:flex; align-items:center; justify-content:space-between;
-            background: rgba(255,255,255,0.8); backdrop-filter:blur(10px); border-bottom:2px solid var(--ink);
+            background: var(--paper); border-bottom:2px solid var(--ink);
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 8rem 2rem 4rem; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 8rem 2rem 4rem; }
 
-        .search-wrap { max-width: 700px; margin: 0 auto 3rem; position: relative; }
+        .search-wrap { max-width: 800px; margin: 0 auto 4rem; position: relative; }
         .search-wrap input {
-            width: 100%; border: 2px solid var(--ink); border-radius: 50px; padding: 1rem 3.5rem 1rem 1.5rem;
-            font-size: 1.1rem; background: #fff; box-shadow: 4px 4px 0 var(--ink); outline: none;
+            width: 100%; border: 2px solid var(--ink); border-radius: 50px; padding: 1.2rem 4rem 1.2rem 2rem;
+            font-size: 1.2rem; background: #fff; box-shadow: 6px 6px 0 var(--ink); outline: none;
         }
-        .search-wrap i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 1.4rem; color: var(--accent-red); }
+        .search-wrap i { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--accent-red); }
 
-        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2.5rem; }
-        @media (max-width: 768px) {
-            .hadith-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .notebook { padding: 1.5rem; }
-            .hadith-text { font-size: 1.3rem; }
-            .container { padding-top: 6rem; }
-            .gateway-title { font-size: 2.2rem; }
+        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 3rem; }
+        
+        .notebook {
+            background: #fff; border: 2px solid var(--ink); border-radius: 4px 20px 20px 4px;
+            padding: 2.5rem; box-shadow: 10px 10px 0 var(--shadow); position: relative;
+            animation: fadeInUp 0.8s ease both;
         }
-
-        /* Poetry Styling */
-        .poem-block { margin: 1.5rem 0; text-align: center; background: rgba(231,111,81,0.03); padding: 1rem; border-radius: 10px; border: 1px dashed var(--border); }
-        .verse-line { display: block; margin-bottom: 0.5rem; font-style: italic; color: var(--accent-red); font-weight: 700; }
-
-        /* API Documentation Section */
-        .api-docs { background: var(--ink); color: #fff; padding: 3rem 2rem; border-radius: 20px; margin-top: 5rem; }
-        .api-docs pre { background: #222; padding: 1rem; border-radius: 10px; overflow-x: auto; direction: ltr; text-align: left; font-family: monospace; font-size: 0.9rem; margin: 1rem 0; color: #10b981; }
         .notebook::before {
-            content: ""; position: absolute; top: 10px; bottom: 10px; right: 12px; width: 4px;
+            content: ""; position: absolute; top: 15px; bottom: 15px; right: 15px; width: 5px;
             background: repeating-linear-gradient(to bottom, var(--ink), var(--ink) 4px, transparent 4px, transparent 20px);
         }
 
-        .hadith-text { font-family: "Amiri", serif; font-size: 1.6rem; line-height: 2.3; margin-bottom: 1.5rem; text-align: justify; }
-        .meta-row { display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px dashed var(--border); padding-top: 1rem; }
-        .badge { border: 1px solid var(--ink); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; background: var(--paper); }
+        .hadith-text { font-family: "Amiri", serif; font-size: 1.6rem; line-height: 2.4; margin-bottom: 2rem; text-align: justify; }
+        .poem-block { margin: 1.5rem 0; text-align: center; background: rgba(0,0,0,0.02); padding: 1rem; border-radius: 10px; border: 1px dashed var(--border); }
+        .verse-line { display: block; margin-bottom: 0.5rem; font-style: italic; color: var(--accent-red); font-weight: 700; }
+
+        .meta-row { display: flex; flex-wrap: wrap; gap: 10px; border-top: 1px dashed var(--border); padding-top: 1.5rem; }
+        .badge { border: 1px solid var(--ink); padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; background: var(--paper); }
 
         .whatsapp-float {
             position: fixed; bottom: 30px; left: 30px; z-index: 1000;
             background: #25d366; color: white; border: 2px solid var(--ink);
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 4px 4px 0 var(--ink); text-decoration: none; font-size: 2rem;
+            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 6px 6px 0 var(--ink); text-decoration: none; font-size: 2.2rem;
         }
 
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        .loading { display: none; text-align: center; padding: 4rem; }
-        .spinner { border: 4px solid var(--border); border-top-color: var(--accent-red); width: 40px; height: 40px; border-radius: 50%; animation: spin 1s infinite linear; margin: auto; }
+        .loading { display: none; text-align: center; padding: 5rem; }
+        .spinner { border: 5px solid var(--border); border-top-color: var(--accent-red); width: 50px; height: 50px; border-radius: 50%; animation: spin 1s infinite linear; margin: auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
     </style>
 </head>
 <body>
-    <!-- Gateway Screen -->
+
+    <!-- Gateway / Intro Screen -->
     <div id="gateway">
         <h1 class="gateway-title">مَوْسُوعَةُ الحَدِيثِ الشَّرِيفِ</h1>
-        <p class="gateway-sub">يرجى اختيار الكتاب لبدء التصفح (سيتم تحميل 500 حديث فوراً)</p>
-        <div class="book-grid" id="book-selector">
-            <div class="book-card" onclick="startApp('all')">
-                <i class="ri-stack-line"></i>
-                <h3>كل الموسوعة</h3>
-            </div>
-            <!-- Dynamic Books -->
+        <p style="font-weight: 700; color: var(--ink); opacity: 0.8;">المشروع الأضخم لرقمنة السنة النبوية الشريفة</p>
+
+        <div class="features-intro">
+            <div class="feat-item"><i class="ri-database-2-line"></i><h3>50,000 حديث</h3><p>قاعدة بيانات ضخمة ومحدثة</p></div>
+            <div class="feat-item"><i class="ri-search-eye-line"></i><h3>بحث ذكي</h3><p>محرك بحث فائق السرعة بالمواضيع</p></div>
+            <div class="feat-item"><i class="ri-code-s-slash-line"></i><h3>API مفتوح</h3><p>دعم كامل للمبرمجين والمطورين</p></div>
         </div>
+
+        <div class="action-bars">
+            <button class="btn-main" onclick="showBooks()">دخول الموسوعة</button>
+            <button class="btn-dev" onclick="togglePortal(true)">بوابة المطورين</button>
+        </div>
+
+        <div id="book-selector-wrap" style="display: none; width: 100%; max-width: 1000px;">
+            <p style="margin-bottom: 1.5rem; font-weight: 900;">اختر الكتاب لبدء التحميل:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;" id="selector-grid">
+                <div class="feat-item" style="cursor: pointer;" onclick="enterApp('all')"><i class="ri-stack-line"></i><h3>كل الموسوعة</h3></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Portal Section -->
+    <div id="dev-portal">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #10b981; padding-bottom: 1rem;">
+            <h2>API DOCUMENTATION v1.0</h2>
+            <button onclick="togglePortal(false)" style="background:#10b981; color:#000; border:none; padding:5px 20px; cursor:pointer; font-weight:bold;">إغلاق</button>
+        </div>
+        
+        <p style="margin-top: 2rem;">مرحباً بك أيها المطور! يمكنك استهلاك بيانات الموسوعة مجاناً عبر الـ Endpoints التالية:</p>
+        
+        <div class="code-block">
+            // جلب الأحاديث مع الفلترة والبحث
+            GET https://hadess-red.vercel.app/api/hadiths?q={الكلمة}&category={الكتاب}&limit=500
+        </div>
+
+        <div class="code-block">
+            // جلب قائمة الكتب المتوفرة
+            GET https://hadess-red.vercel.app/api/categories
+        </div>
+
+        <p>المعاملات المدعومة: q (للبحث)، category (اسم الكتاب)، limit (العدد حتى 500)، page (رقم الصفحة).</p>
     </div>
 
     <!-- Main Content -->
     <nav>
-        <div style="font-family:'Amiri'; font-weight:900; font-size:1.6rem;">بوابة الحديث</div>
-        <div style="display:flex; gap:1rem; align-items:center;">
-            <div id="counter" style="font-weight:800; color:var(--accent-red);">جاري التجهيز...</div>
-            <button onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')" style="border:2px solid var(--ink); background:#fff; padding:5px 10px; border-radius:8px; cursor:pointer;"><i class="ri-moon-line"></i></button>
-        </div>
+        <div style="font-family:'Amiri'; font-weight:900; font-size:1.8rem;">منصة السنة</div>
+        <div id="counter" style="font-weight:900; color:var(--accent-red);">0 حديث</div>
     </nav>
 
     <main class="container">
@@ -136,72 +167,65 @@
 
         <div class="hadith-grid" id="grid"></div>
         <div id="loader" class="loading"><div class="spinner"></div></div>
-
-        <!-- API Documentation -->
-        <section class="api-docs">
-            <h2 style="font-family:'Amiri'; font-size:2rem; margin-bottom:1rem;">بوابة المبرمجين (API Access)</h2>
-            <p>يمكن للمبرمجين استخدام الخدمة مجاناً عبر الرابط التالي:</p>
-            <pre>GET https://hadess-red.vercel.app/api/hadiths?q=الكلمة&limit=20</pre>
-            <div style="margin-top:1rem; font-size:0.9rem; opacity:0.8;">
-                <p>المعاملات المدعومة:</p>
-                <ul style="margin-right:20px; margin-top:10px;">
-                    <li><b>q:</b> الكلمة المراد البحث عنها في المتن أو الراوي.</li>
-                    <li><b>category:</b> اسم الكتاب (مثل: bukhari, muslim, ahmad).</li>
-                    <li><b>limit:</b> عدد النتائج (الافتراضي 20، الحد الأقصى 500).</li>
-                    <li><b>page:</b> رقم الصفحة للتنقل بين النتائج.</li>
-                </ul>
-            </div>
-        </section>
     </main>
 
     <a href="https://wa.me/20102891489" class="whatsapp-float"><i class="ri-whatsapp-line"></i></a>
 
     <script>
         const catMap = { 'ahmad': 'مسند أحمد', 'bukhari': 'صحيح البخاري', 'muslim': 'صحيح مسلم', 'tirmidhi': 'جامع الترمذي', 'abudawud': 'سنن أبي داود', 'nasai': 'سنن النسائي', 'ibnmajah': 'سنن ابن ماجه', 'malik': 'موطأ مالك' };
-        let currentCat = 'all'; let query = ''; let page = 1;
+        let currentCat = 'all'; let query = ''; let page = 1; let loading = false;
 
         async function init() {
             const res = await fetch('/api/categories');
             const json = await res.json();
-            const selector = document.getElementById('book-selector');
+            const grid = document.getElementById('selector-grid');
             json.data.forEach(c => {
                 const div = document.createElement('div');
-                div.className = 'book-card';
-                div.onclick = () => startApp(c);
+                div.className = 'feat-item';
+                div.style.cursor = 'pointer';
+                div.onclick = () => enterApp(c);
                 div.innerHTML = `<i class="ri-book-3-line"></i><h3>${catMap[c] || c}</h3>`;
-                selector.appendChild(div);
+                grid.appendChild(div);
             });
         }
 
-        async function startApp(cat) {
+        function showBooks() {
+            document.querySelector('.action-bars').style.display = 'none';
+            document.getElementById('book-selector-wrap').style.display = 'block';
+        }
+
+        function togglePortal(show) {
+            document.getElementById('dev-portal').style.display = show ? 'flex' : 'none';
+        }
+
+        function enterApp(cat) {
             currentCat = cat;
-            document.getElementById('gateway').classList.add('fade-out');
+            document.getElementById('gateway').classList.add('hidden');
             loadData(true);
         }
 
         async function loadData(reset = false) {
+            if (loading) return;
+            loading = true;
             const grid = document.getElementById('grid');
             const loader = document.getElementById('loader');
             if (reset) { grid.innerHTML = ''; page = 1; }
             loader.style.display = 'block';
 
             try {
-                // نطلب 500 حديث دفعة واحدة كما طلب المستخدم
                 const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=500`);
                 const json = await res.json();
                 render(json.data);
-                document.getElementById('counter').textContent = `تم تحميل ${grid.children.length} حديث`;
+                document.getElementById('counter').textContent = `${grid.children.length} حديث`;
             } catch(e) {}
             loader.style.display = 'none';
+            loading = false;
         }
 
         function render(data) {
             const grid = document.getElementById('grid');
             data.forEach(h => {
-                let cleanText = (h.text || "");
-                // تنظيف [place]
-                cleanText = cleanText.replace(/\[place\](.*?)\[\/place\]/g, '<span style="color:var(--accent-red); font-weight:700;">$1</span>');
-                // تنظيف [poem] و [verse]
+                let cleanText = (h.text || "").replace(/\[place\](.*?)\[\/place\]/g, '<span style="color:var(--accent-red); font-weight:700;">$1</span>');
                 cleanText = cleanText.replace(/\[poem\](.*?)\[\/poem\]/gs, '<div class="poem-block">$1</div>');
                 cleanText = cleanText.replace(/\[verse\](.*?)\[\/verse\]/g, '<span class="verse-line">$1</span>');
                 
@@ -221,10 +245,10 @@
             });
         }
 
-        // Infinite scroll for next 500s
+        // Automatic Infinite Scroll
         window.onscroll = () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
-                if (!document.getElementById('loader').style.display === 'block') {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1200) {
+                if (!loading) {
                     page++;
                     loadData();
                 }
