@@ -153,8 +153,9 @@
                 resultsContainer.innerHTML = hadiths.map((h, index) => `
                     <div class="hadith-card animate-up" style="animation-delay: ${index * 0.05}s">
                         <div class="hadith-text">${h.text}</div>
+                        ${h.english ? `<div class="hadith-english" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; text-align: left; direction: ltr;">${h.english}</div>` : ''}
                         <div class="hadith-meta">
-                            <span class="hadith-source">${h.source}</span>
+                            <span class="hadith-source"><i data-lucide="book" style="width: 14px; vertical-align: middle;"></i> ${h.source}</span>
                             <span class="hadith-chapter">${h.chapter || ''}</span>
                         </div>
                     </div>

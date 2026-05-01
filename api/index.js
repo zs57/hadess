@@ -61,13 +61,17 @@ app.get(['/api/hadiths', '/hadiths'], async (req, res) => {
       .limit(parseInt(limit))
       .toArray();
 
+    // Map the results specifically to your data structure (arabic_text, english_text, etc.)
+    const mappedHadiths = hadiths.map(h => ({
+        text: h.arabic_text || "النص غير متوفر",
+        english: h.english_text || "",
+        source: (h.collection || "غير محدد") + " - كتاب " + (h.book || ""),
+        chapter: h.narrator || ""
+    }));
+
     res.json({ 
         status: 'success', 
-        data: hadiths,
-        meta: { 
-            collectionUsed: targetCollection,
-            totalCollections: collectionNames
-        }
+        data: mappedHadiths
     });
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
