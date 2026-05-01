@@ -36,8 +36,11 @@
         }
         #gateway.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; transition: 1s cubic-bezier(0.19, 1, 0.22, 1); }
 
-        .gateway-title { font-family: "Amiri", serif; font-size: 4rem; color: var(--accent-red); margin-bottom: 1rem; }
-        @media (max-width: 768px) { .gateway-title { display: none; } } /* إخفاء في الهاتف */
+        .gateway-title { font-family: "Amiri", serif; font-size: 4rem; color: var(--accent-red); margin-bottom: 1rem; text-shadow: 2px 2px 0 var(--border); }
+        @media (max-width: 768px) { 
+            .gateway-title { font-size: 2.5rem; display: block; margin-top: 1rem; } 
+            .features-intro { grid-template-columns: 1fr; gap: 1rem; }
+        }
 
         .features-intro {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -110,7 +113,8 @@
     <!-- Gateway / Intro Screen -->
     <div id="gateway">
         <h1 class="gateway-title">مَوْسُوعَةُ الحَدِيثِ الشَّرِيفِ</h1>
-        <p style="font-weight: 700; color: var(--ink); opacity: 0.8;">المشروع الأضخم لرقمنة السنة النبوية الشريفة</p>
+        <p style="font-weight: 800; color: var(--accent-red); font-size: 1.2rem; margin-bottom: 1rem;">أهلاً بك في أكبر مكتبة رقمية للسنة</p>
+        <p style="color: var(--ink); opacity: 0.7; max-width: 600px; line-height: 1.6;">هذا الموقع مصمم ليكون سهلاً جداً. يمكنك البحث عن أي حديث أو اختيار كتابك المفضل لتبدأ القراءة فوراً.</p>
 
         <div class="features-intro">
             <div class="feat-item"><i class="ri-database-2-line"></i><h3>50,000 حديث</h3><p>قاعدة بيانات ضخمة ومحدثة</p></div>
@@ -119,8 +123,8 @@
         </div>
 
         <div class="action-bars">
-            <button class="btn-main" onclick="showBooks()">دخول الموسوعة</button>
-            <button class="btn-dev" onclick="togglePortal(true)">بوابة المطورين</button>
+            <button class="btn-main" onclick="showBooks()"><i class="ri-play-circle-line"></i> ابدأ التصفح الآن</button>
+            <button class="btn-dev" onclick="togglePortal(true)"><i class="ri-code-box-line"></i> للمبرمجين</button>
         </div>
 
         <div id="book-selector-wrap" style="display: none; width: 100%; max-width: 1000px;">
