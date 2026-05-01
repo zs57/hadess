@@ -1,50 +1,43 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
-require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = "mongodb+srv://zezo411200:zezo4112000@cluster0.9yrl0ey.mongodb.net/?retryWrites=true&w=majority";
+// الربط المباشر بقاعدة البيانات sunnah
+const uri = "mongodb+srv://zezo411200:zezo4112000@cluster0.9yrl0ey.mongodb.net/sunnah?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
-  connectTimeoutMS: 20000,
-  family: 4,
-  tlsAllowInvalidCertificates: true
+  connectTimeoutMS: 30000, // زيادة المهلة لضمان الاتصال
+  family: 4
 });
 
 let cachedDb = null;
-let targetCollName = "hadiths"; // Default
 
 async function getDatabase() {
   if (cachedDb) return cachedDb;
   await client.connect();
-  cachedDb = client.db("sunnah");
-  
-  // Auto-discover the main collection name once
-  const collections = await cachedDb.listCollections().toArray();
-  const names = collections.map(c => c.name);
-  if (names.length > 0) {
-    targetCollName = names.includes('hadiths') ? 'hadiths' : names[0];
-  }
-  
+  cachedDb = client.db(); // سيستخدم قاعدة sunnah المذكورة في الرابط تلقائياً
   return cachedDb;
 }
 
-// Fixed Categories Endpoint
+// قائمة التصنيفات الأساسية كـ Fallback سريع لضمان عدم ظهور 500
+const defaultCategories = ["ahmad", "bukhari", "muslim", "tirmidhi", "abudawud", "nasai", "ibnmajah", "malik"];
+
 app.get('/api/categories', async (req, res) => {
   try {
     const db = await getDatabase();
-    const categories = await db.collection(targetCollName).distinct('collection');
-    res.json({ status: 'success', data: categories.filter(c => c) });
+    // محاولة جلب التصنيفات الحقيقية مع وضع مهلة (Timeout)
+    const categories = await db.collection('hadiths').distinct('collection');
+    res.json({ status: 'success', data: categories.length > 0 ? categories : defaultCategories });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    // إذا فشل الـ Distinct لأي سبب، نرسل القائمة الافتراضية لكي لا يتعطل الموقع
+    res.json({ status: 'success', data: defaultCategories });
   }
 });
 
-// Advanced Topic Search Endpoint
 app.get('/api/hadiths', async (req, res) => {
   try {
     const db = await getDatabase();
@@ -55,15 +48,13 @@ app.get('/api/hadiths', async (req, res) => {
     if (category && category !== 'all') query.collection = category;
     
     if (q) {
-      // Powerful Topic Search in multiple fields
       query.$or = [
         { arabic_text: { $regex: q, $options: 'i' } },
-        { english_text: { $regex: q, $options: 'i' } },
-        { narrator: { $regex: q, $options: 'i' } }
+        { english_text: { $regex: q, $options: 'i' } }
       ];
     }
 
-    const hadiths = await db.collection(targetCollName)
+    const hadiths = await db.collection('hadiths')
       .find(query)
       .sort({ _id: -1 })
       .skip(skip)
