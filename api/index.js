@@ -22,7 +22,7 @@ let cachedDb = null;
 async function getDatabase() {
   if (cachedDb) return cachedDb;
   await client.connect();
-  cachedDb = client.db("hadith_db");
+  cachedDb = client.db("sunnah"); // Updated to 'sunnah' based on your Atlas screenshot
   return cachedDb;
 }
 
@@ -31,6 +31,11 @@ async function getDatabase() {
 app.get(['/api/hadiths', '/hadiths'], async (req, res) => {
   try {
     const db = await getDatabase();
+    
+    // Debug: Check which collections exist if we find nothing
+    const collections = await db.listCollections().toArray();
+    const collectionNames = collections.map(c => c.name);
+
     const { category, q, page = 1, limit = 20 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
@@ -38,14 +43,32 @@ app.get(['/api/hadiths', '/hadiths'], async (req, res) => {
     if (category && category !== 'all') query.category = category;
     if (q) query.text = { $regex: q, $options: 'i' };
 
-    const hadiths = await db.collection('hadiths')
+    // We will try to use the first available collection if 'hadiths' doesn't exist
+    const targetCollection = collectionNames.includes('hadiths') ? 'hadiths' : collectionNames[0];
+
+    if (!targetCollection) {
+        return res.json({ 
+            status: 'error', 
+            message: 'لم يتم العثور على أي جداول (Collections) في قاعدة البيانات. يرجى التأكد من رفع البيانات.',
+            debug: { dbName: db.databaseName, foundCollections: collectionNames }
+        });
+    }
+
+    const hadiths = await db.collection(targetCollection)
       .find(query)
       .sort({ _id: -1 })
       .skip(skip)
       .limit(parseInt(limit))
       .toArray();
 
-    res.json({ status: 'success', data: hadiths });
+    res.json({ 
+        status: 'success', 
+        data: hadiths,
+        meta: { 
+            collectionUsed: targetCollection,
+            totalCollections: collectionNames
+        }
+    });
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
