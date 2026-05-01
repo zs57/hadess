@@ -1,235 +1,223 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موسوعة السنة النبوية | التصميم الإسلامي المزخرف</title>
+    <title>موسوعة الحديث الشريف | المنصة العالمية</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700;800;900&display=swap');
 
         :root {
-            --islamic-green: #064e3b;
-            --emerald: #065f46;
-            --gold: #d4af37;
-            --gold-light: #f4e4bc;
-            --bg-cream: #fdfbf7;
-            --text-dark: #1a1a1a;
-            --text-muted: #4b5563;
-            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            /* Light Theme Tokens */
+            --bg-primary: #fdfbf7;
+            --bg-secondary: #ffffff;
+            --accent-gold: #c5a059;
+            --accent-green: #064e3b;
+            --text-main: #1a1a1a;
+            --text-muted: #64748b;
+            --card-border: rgba(197, 160, 89, 0.2);
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --glass: rgba(255, 255, 255, 0.9);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
-
-        body {
-            background-color: var(--bg-cream);
-            background-image: url('https://www.transparenttextures.com/patterns/islamic-exercise.png'); /* نمط إسلامي خفيف */
-            color: var(--text-dark);
-            min-height: 100vh;
+        [data-theme="dark"] {
+            /* Dark Theme Tokens */
+            --bg-primary: #05070a;
+            --bg-secondary: #0d1117;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-border: rgba(212, 175, 55, 0.2);
+            --shadow: 0 20px 50px rgba(0,0,0,0.5);
+            --glass: rgba(13, 17, 23, 0.95);
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; transition: background 0.3s ease, color 0.3s ease; }
 
-        /* Header Decorative */
+        body { background: var(--bg-primary); color: var(--text-main); min-height: 100vh; line-height: 1.8; }
+
+        /* Progress Bar */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gold); z-index: 10001; }
+
         header {
-            background: var(--islamic-green);
-            color: white;
-            padding: 1.5rem 5%;
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border-bottom: 3px solid var(--gold);
+            background: var(--glass); backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--card-border);
+            padding: 1rem 5%; position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
         }
 
-        .logo { 
-            display: flex; align-items: center; gap: 12px; 
-            font-size: 1.8rem; font-weight: 900; color: var(--gold);
-            font-family: 'Amiri', serif;
+        .logo { font-family: 'Amiri', serif; font-size: 1.8rem; font-weight: 900; color: var(--accent-gold); display: flex; align-items: center; gap: 10px; }
+
+        .theme-toggle {
+            background: var(--card-border); border: none; padding: 10px; border-radius: 12px;
+            cursor: pointer; color: var(--accent-gold); display: flex; align-items: center;
         }
 
-        /* Hero Section with Arch */
-        .hero {
-            text-align: center; padding: 4rem 1rem;
-            background: linear-gradient(rgba(6, 78, 59, 0.9), rgba(6, 78, 59, 0.8)), url('https://images.unsplash.com/photo-1590076215667-873d6f009ad4?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover; background-position: center;
-            color: white; clip-path: ellipse(150% 100% at 50% 0%);
-            margin-bottom: 3rem;
+        /* Book Selector Overlay */
+        #welcome-overlay {
+            position: fixed; inset: 0; background: var(--bg-primary); z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 2rem; text-align: center; overflow-y: auto;
         }
-        .hero h1 { font-family: 'Amiri', serif; font-size: 4rem; margin-bottom: 1rem; color: var(--gold); }
+        #welcome-overlay.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
 
-        /* Search Box Decorative */
-        .search-box {
-            max-width: 700px; margin: -50px auto 3rem;
-            background: white; border: 2px solid var(--gold);
-            border-radius: 15px; padding: 1rem 2rem;
-            display: flex; align-items: center; gap: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        .book-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem; width: 100%; max-width: 1000px; margin-top: 3rem;
         }
-        .search-box input { background: transparent; border: none; width: 100%; font-size: 1.1rem; outline: none; }
+        .book-btn {
+            background: var(--bg-secondary); border: 1px solid var(--card-border);
+            padding: 2rem; border-radius: 20px; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+        }
+        .book-btn:hover { border-color: var(--accent-gold); transform: translateY(-10px); background: var(--card-border); }
+        .book-btn i { font-size: 2rem; color: var(--accent-gold); }
 
-        /* Categories Scroll */
-        .categories-grid {
-            display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 3rem;
-            scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
-        }
-        .cat-card {
-            flex: 0 0 auto; background: white; border: 1px solid #e5e7eb;
-            border-radius: 10px; padding: 0.7rem 1.5rem; cursor: pointer; transition: var(--transition);
-            font-weight: bold; color: var(--islamic-green);
-        }
-        .cat-card.active { background: var(--islamic-green); color: var(--gold); border-color: var(--gold); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
 
-        /* Hadith Cards - Ornate Design */
-        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2.5rem; }
+        .search-area {
+            max-width: 900px; margin: 2rem auto 4rem; position: relative;
+        }
+        .search-area input {
+            width: 100%; background: var(--bg-secondary); border: 1px solid var(--card-border);
+            padding: 1.2rem 4rem 1.2rem 2rem; border-radius: 50px; color: var(--text-main);
+            font-size: 1.2rem; outline: none; box-shadow: var(--shadow);
+        }
+        .search-area i { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); }
+
+        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2.5rem; }
         
         .hadith-card {
-            background: white;
-            border: 1px solid #d1d5db;
-            border-radius: 5px; padding: 2.5rem;
-            position: relative; transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            /* زخارف الزوايا */
-            background-image: 
-                url('https://www.transparenttextures.com/patterns/cream-pixels.png'),
-                linear-gradient(to bottom, transparent, #fffdfa);
+            background: var(--bg-secondary); border: 1px solid var(--card-border);
+            border-radius: 30px; padding: 2.5rem; position: relative;
+            box-shadow: var(--shadow); animation: fadeInUp 0.6s ease forwards;
         }
-        /* براويز إسلامية في الزوايا */
-        .hadith-card::after {
-            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.3); pointer-events: none;
+        .hadith-card:hover { border-color: var(--accent-gold); transform: scale(1.01); }
+
+        .hadith-text { font-family: 'Amiri', serif; font-size: 1.6rem; color: var(--text-main); margin-bottom: 1.5rem; text-align: justify; }
+        .sanad-badge { display: inline-block; background: rgba(197, 160, 89, 0.1); color: var(--accent-gold); padding: 4px 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem; border-right: 3px solid var(--accent-gold); }
+
+        .actions { display: flex; gap: 1rem; margin-top: 2rem; border-top: 1px solid var(--card-border); padding-top: 1.5rem; }
+        .action-btn { background: none; border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 15px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: 0.2s; }
+        .action-btn:hover { color: var(--accent-gold); border-color: var(--accent-gold); background: rgba(197, 160, 89, 0.05); }
+
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); z-index: 9999;
         }
 
-        .hadith-text { 
-            font-family: 'Amiri', serif; font-size: 1.6rem; text-align: justify; 
-            margin-bottom: 1.5rem; color: var(--islamic-green); line-height: 2.3;
-            position: relative; z-index: 1;
-        }
-
-        .sanad-box { 
-            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;
-            border-bottom: 1px solid var(--gold-light); padding-bottom: 5px;
-            font-style: italic;
-        }
-
-        .hadith-footer {
-            margin-top: auto; padding-top: 1rem;
-            display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start;
-        }
-        .badge { 
-            background: var(--gold-light); color: var(--islamic-green); 
-            padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        /* WhatsApp Button */
-        .whatsapp-btn {
-            position: fixed; bottom: 30px; left: 30px;
-            background: #25d366; color: white;
-            width: 65px; height: 65px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            z-index: 10000; transition: var(--transition);
-            text-decoration: none;
-        }
-        .whatsapp-btn:hover { transform: scale(1.1) rotate(10deg); }
-
-        #load-more-trigger { height: 120px; display: flex; align-items: center; justify-content: center; width: 100%; }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-spinner { width: 35px; height: 35px; border: 3px solid #e5e7eb; border-top-color: var(--gold); border-radius: 50%; animation: spin 1s infinite linear; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <i data-lucide="mosque"></i>
-            <span>موسوعة<span>السنة</span></span>
+    <div id="progress"></div>
+
+    <!-- Welcome Overlay -->
+    <div id="welcome-overlay">
+        <h1 style="font-family: 'Amiri', serif; font-size: 3.5rem; color: var(--accent-gold);">مَرْحَبًا بِكَ فِي بَوَّابَةِ السُّنَّةِ</h1>
+        <p style="color: var(--text-muted);">يرجى اختيار كتاب لتبدأ التصفح من بين 50,000 حديث</p>
+        <div class="book-grid" id="overlay-books">
+            <!-- Dynamic Books -->
         </div>
-        <div id="stats" style="font-size: 0.85rem; opacity: 0.9;">تحميل أحاديث المصطفى ﷺ...</div>
+        <button onclick="enterApp('all')" style="margin-top: 3rem; background: var(--accent-gold); color: white; border: none; padding: 1rem 3rem; border-radius: 50px; cursor: pointer; font-weight: 800;">تصفح كل الموسوعة مباشرة</button>
+    </div>
+
+    <header>
+        <div class="logo"><i data-lucide="award"></i> منصة<span>الحديث</span></div>
+        <div style="display: flex; gap: 1rem;">
+            <button class="theme-toggle" onclick="toggleTheme()"><i data-lucide="moon" id="theme-icon"></i></button>
+            <button class="theme-toggle" onclick="location.reload()"><i data-lucide="refresh-cw"></i></button>
+        </div>
     </header>
 
-    <section class="hero">
-        <h1>مَوْسُوعَةُ الحَدِيثِ الشَّرِيفِ</h1>
-        <p style="font-size: 1.3rem; opacity: 0.9;">بوابة الأحاديث النبوية والأسانيد الموثقة</p>
-    </section>
-
     <main class="container">
-        <div class="search-box">
-            <i data-lucide="search" style="color: var(--gold);"></i>
-            <input type="text" id="main-search" placeholder="ابحث في المتون أو المواضيع الفقهية...">
+        <div class="search-area">
+            <i data-lucide="search"></i>
+            <input type="text" id="search-input" placeholder="ابحث في المواضيع، الرواة، أو النصوص...">
         </div>
 
-        <div class="categories-grid" id="cat-list">
-            <div class="cat-card active" data-cat="all">كافة الكتب</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 id="current-title" style="color: var(--accent-gold);">كافة الأحاديث</h2>
+            <div id="stats-badge" class="sanad-badge" style="margin:0">جاري التحميل...</div>
         </div>
 
         <div class="hadith-grid" id="main-grid"></div>
-        <div id="load-more-trigger"><div class="loading-spinner"></div></div>
+        <div id="loader" style="text-align: center; padding: 5rem;"><div style="width: 40px; height: 40px; border: 4px solid var(--card-border); border-top-color: var(--accent-gold); border-radius: 50%; animation: rotate 1s infinite linear; margin: auto;"></div></div>
     </main>
 
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/20102891489" class="whatsapp-btn" target="_blank" title="تواصل معنا عبر واتساب">
-        <i data-lucide="message-circle" style="width: 35px; height: 35px;"></i>
-    </a>
+    <a href="https://wa.me/20102891489" class="whatsapp-float" target="_blank"><i data-lucide="message-circle"></i></a>
 
     <script>
         const catMap = { 'ahmad': 'مسند أحمد', 'bukhari': 'صحيح البخاري', 'muslim': 'صحيح مسلم', 'tirmidhi': 'جامع الترمذي', 'abudawud': 'سنن أبي داود', 'nasai': 'سنن النسائي', 'ibnmajah': 'سنن ابن ماجه', 'malik': 'موطأ مالك' };
-        
-        let page = 1;
-        let currentCat = 'all';
-        let query = '';
-        let loading = false;
-        let hasMore = true;
+        let page = 1; let currentCat = 'all'; let query = ''; let loading = false;
 
-        const grid = document.getElementById('main-grid');
-        const catList = document.getElementById('cat-list');
-        const search = document.getElementById('main-search');
-
-        async function fetchCategories() {
-            try {
-                const res = await fetch('/api/categories');
-                const json = await res.json();
-                if(json.status === 'success') {
-                    json.data.forEach(c => {
-                        const card = document.createElement('div');
-                        card.className = 'cat-card';
-                        card.dataset.cat = c;
-                        card.textContent = catMap[c] || c;
-                        catList.appendChild(card);
-                    });
-                }
-            } catch(e) {}
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('theme-icon').setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+            lucide.createIcons();
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
 
-        async function loadHadiths(reset = false) {
-            if (loading || (!hasMore && !reset)) return;
-            loading = true;
-            if (reset) { page = 1; grid.innerHTML = ''; hasMore = true; }
+        // Enter App
+        function enterApp(cat) {
+            currentCat = cat;
+            document.getElementById('welcome-overlay').classList.add('hidden');
+            document.getElementById('current-title').textContent = catMap[cat] || 'كافة الأحاديث';
+            fetchHadiths(true);
+        }
 
+        async function fetchCategories() {
+            const res = await fetch('/api/categories');
+            const json = await res.json();
+            const container = document.getElementById('overlay-books');
+            json.data.forEach(c => {
+                const btn = document.createElement('div');
+                btn.className = 'book-btn';
+                btn.onclick = () => enterApp(c);
+                btn.innerHTML = `<i data-lucide="book"></i><h3>${catMap[c] || c}</h3>`;
+                container.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        async function fetchHadiths(reset = false) {
+            if (loading) return;
+            loading = true;
+            if (reset) { page = 1; document.getElementById('main-grid').innerHTML = ''; }
+            
             try {
-                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=15`);
+                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=50`);
                 const json = await res.json();
-                if(json.status === 'success') {
-                    if (json.data.length < 15) hasMore = false;
-                    render(json.data);
-                    page++;
-                    document.getElementById('stats').textContent = `تم عرض ${grid.children.length} حديث شريف`;
-                }
-            } catch(e) {}
+                render(json.data);
+                page++;
+                document.getElementById('stats-badge').textContent = `تم عرض ${document.getElementById('main-grid').children.length} حديث`;
+            } catch (e) {}
             loading = false;
         }
 
         function render(data) {
+            const grid = document.getElementById('main-grid');
             data.forEach(h => {
                 const card = document.createElement('div');
                 card.className = 'hadith-card';
                 card.innerHTML = `
-                    <div class="sanad-box">عن ${h.chapter}</div>
+                    <div class="sanad-badge">عن ${h.chapter}</div>
                     <div class="hadith-text">${h.text}</div>
-                    <div class="hadith-footer">
-                        <div class="badge">${h.source}</div>
-                        ${h.ref ? `<div class="badge">${h.ref}</div>` : ''}
-                        ${h.grade ? `<div class="badge" style="background:var(--emerald); color:white">${h.grade}</div>` : ''}
+                    ${h.english ? `<div style="font-size:0.9rem; color:var(--text-muted); direction:ltr; text-align:left; border-left: 2px solid var(--accent-gold); padding-left:15px; margin-bottom:1.5rem;">${h.english}</div>` : ''}
+                    <div style="display:flex; gap:10px; flex-wrap:wrap">
+                        <span style="font-size:0.75rem; color:var(--accent-gold); border:1px solid var(--accent-gold); padding:2px 8px; border-radius:5px;">${h.source}</span>
+                        ${h.grade ? `<span style="font-size:0.75rem; background:rgba(16,185,129,0.1); color:var(--accent-green); padding:2px 8px; border-radius:5px;">${h.grade}</span>` : ''}
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn" onclick="copyHadith('${h.text.replace(/'/g, "\\'")}')"><i data-lucide="copy"></i> نسخ</button>
+                        <button class="action-btn" onclick="shareHadith('${h.text.replace(/'/g, "\\'")}')"><i data-lucide="share-2"></i> مشاركة</button>
+                        <button class="action-btn"><i data-lucide="heart"></i> مفضلة</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -237,28 +225,27 @@
             lucide.createIcons();
         }
 
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) loadHadiths();
-        }, { threshold: 0.1 });
-        observer.observe(document.getElementById('load-more-trigger'));
+        function copyHadith(txt) { navigator.clipboard.writeText(txt); alert('تم نسخ الحديث!'); }
+        function shareHadith(txt) { window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`); }
 
-        catList.addEventListener('click', e => {
-            const card = e.target.closest('.cat-card');
-            if(!card) return;
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            currentCat = card.dataset.cat;
-            loadHadiths(true);
-        });
+        // Infinite Scroll & Progress
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progress').style.width = (winScroll / height) * 100 + "%";
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) fetchHadiths();
+        };
 
         let timer;
-        search.addEventListener('input', e => {
+        document.getElementById('search-input').oninput = (e) => {
             clearTimeout(timer);
-            timer = setTimeout(() => { query = e.target.value; loadHadiths(true); }, 600);
-        });
+            timer = setTimeout(() => { query = e.target.value; fetchHadiths(true); }, 600);
+        };
 
+        if(localStorage.getItem('theme') === 'dark') toggleTheme();
         fetchCategories();
         lucide.createIcons();
     </script>
+    <style>@keyframes rotate { to { transform: rotate(360deg); } }</style>
 </body>
 </html>

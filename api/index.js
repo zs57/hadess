@@ -58,7 +58,7 @@ app.get('/api/hadiths', async (req, res) => {
       .find(query)
       .sort({ _id: -1 })
       .skip(skip)
-      .limit(parseInt(limit) || 50) // زيادة العدد الافتراضي لـ 50
+      .limit(parseInt(limit) || 500) // رفع الحد لـ 500 حديث
       .toArray();
 
     const mapped = hadiths.map(h => ({
