@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "name": "hadith-platform-premium",
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1",
+      "continue": true
+    },
+    {
+      "src": "/(.*)",
+      "status": 404,
+      "dest": "/public/index.html"
+    }
+  ]
+}

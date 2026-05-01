@@ -1,0 +1,11 @@
+node_modules
+.env
+.DS_Store
+npm-debug.log
+data/sample_hadiths.json
+api/hadiths.php
+config/database.php
+includes/HadithManager.php
+preview.html
+plan.md
+README.md
