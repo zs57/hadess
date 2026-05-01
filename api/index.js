@@ -22,9 +22,20 @@ let cachedDb = null;
 async function getDatabase() {
   if (cachedDb) return cachedDb;
   await client.connect();
-  cachedDb = client.db("sunnah"); // Updated to 'sunnah' based on your Atlas screenshot
+  cachedDb = client.db("sunnah");
   return cachedDb;
 }
+
+// Endpoint to get all unique collections (categories)
+app.get('/api/categories', async (req, res) => {
+  try {
+    const db = await getDatabase();
+    const collections = await db.collection('hadiths').distinct('collection');
+    res.json({ status: 'success', data: collections });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+});
 
 // Note: On Vercel, the path will already have /api stripped if we route it correctly, 
 // but to be safe, we'll handle both /api/hadiths and /hadiths
@@ -40,8 +51,8 @@ app.get(['/api/hadiths', '/hadiths'], async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
     let query = {};
-    if (category && category !== 'all') query.category = category;
-    if (q) query.text = { $regex: q, $options: 'i' };
+    if (category && category !== 'all') query.collection = category;
+    if (q) query.arabic_text = { $regex: q, $options: 'i' };
 
     // We will try to use the first available collection if 'hadiths' doesn't exist
     const targetCollection = collectionNames.includes('hadiths') ? 'hadiths' : collectionNames[0];
