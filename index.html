@@ -3,142 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موسوعة الحديث الشريف | الإصدار الشامل</title>
+    <title>موسوعة السنة النبوية | التصميم الإسلامي المزخرف</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700;800;900&display=swap');
 
         :root {
-            --bg-primary: #05080a;
-            --bg-secondary: #0d1217;
-            --accent-gold: #d4af37;
-            --accent-emerald: #10b981;
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            --glass-bg: rgba(13, 18, 23, 0.9);
-            --glass-border: rgba(212, 175, 55, 0.2);
+            --islamic-green: #064e3b;
+            --emerald: #065f46;
+            --gold: #d4af37;
+            --gold-light: #f4e4bc;
+            --bg-cream: #fdfbf7;
+            --text-dark: #1a1a1a;
+            --text-muted: #4b5563;
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
 
         body {
-            background: radial-gradient(circle at 0% 0%, #1a3a32 0%, #05080a 50%);
-            background-attachment: fixed;
-            color: var(--text-primary);
+            background-color: var(--bg-cream);
+            background-image: url('https://www.transparenttextures.com/patterns/islamic-exercise.png'); /* نمط إسلامي خفيف */
+            color: var(--text-dark);
             min-height: 100vh;
-            line-height: 1.8;
         }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
 
+        /* Header Decorative */
         header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 1rem 5%;
+            background: var(--islamic-green);
+            color: white;
+            padding: 1.5rem 5%;
             position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--gold);
             display: flex; justify-content: space-between; align-items: center;
         }
 
         .logo { 
             display: flex; align-items: center; gap: 12px; 
-            font-size: 2rem; font-weight: 900; 
-            background: linear-gradient(to right, var(--accent-gold), #fff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 1.8rem; font-weight: 900; color: var(--gold);
+            font-family: 'Amiri', serif;
         }
 
-        .hero { text-align: center; padding: 4rem 1rem 2rem; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-family: 'Amiri', serif; color: var(--accent-gold); }
+        /* Hero Section with Arch */
+        .hero {
+            text-align: center; padding: 4rem 1rem;
+            background: linear-gradient(rgba(6, 78, 59, 0.9), rgba(6, 78, 59, 0.8)), url('https://images.unsplash.com/photo-1590076215667-873d6f009ad4?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover; background-position: center;
+            color: white; clip-path: ellipse(150% 100% at 50% 0%);
+            margin-bottom: 3rem;
+        }
+        .hero h1 { font-family: 'Amiri', serif; font-size: 4rem; margin-bottom: 1rem; color: var(--gold); }
 
+        /* Search Box Decorative */
         .search-box {
-            max-width: 800px; margin: 2rem auto 3rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 50px; padding: 1rem 2.5rem;
-            display: flex; align-items: center; gap: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 700px; margin: -50px auto 3rem;
+            background: white; border: 2px solid var(--gold);
+            border-radius: 15px; padding: 1rem 2rem;
+            display: flex; align-items: center; gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; font-size: 1.2rem; outline: none; }
+        .search-box input { background: transparent; border: none; width: 100%; font-size: 1.1rem; outline: none; }
 
+        /* Categories Scroll */
         .categories-grid {
-            display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1.5rem; margin-bottom: 3rem;
-            scrollbar-width: none;
+            display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 3rem;
+            scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
         }
-        .categories-grid::-webkit-scrollbar { display: none; }
-        
         .cat-card {
-            flex: 0 0 auto; background: var(--bg-secondary);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px; padding: 0.8rem 1.5rem;
-            cursor: pointer; transition: var(--transition);
-            display: flex; align-items: center; gap: 8px;
+            flex: 0 0 auto; background: white; border: 1px solid #e5e7eb;
+            border-radius: 10px; padding: 0.7rem 1.5rem; cursor: pointer; transition: var(--transition);
+            font-weight: bold; color: var(--islamic-green);
         }
-        .cat-card.active { background: var(--accent-gold); color: black; border-color: white; }
+        .cat-card.active { background: var(--islamic-green); color: var(--gold); border-color: var(--gold); }
 
-        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2rem; }
+        /* Hadith Cards - Ornate Design */
+        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2.5rem; }
         
         .hadith-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px; padding: 2rem;
-            transition: var(--transition);
-            display: flex; flex-direction: column;
-            animation: slideUp 0.6s ease forwards;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 5px; padding: 2.5rem;
+            position: relative; transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            /* زخارف الزوايا */
+            background-image: 
+                url('https://www.transparenttextures.com/patterns/cream-pixels.png'),
+                linear-gradient(to bottom, transparent, #fffdfa);
         }
-        .hadith-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        /* براويز إسلامية في الزوايا */
+        .hadith-card::after {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3); pointer-events: none;
+        }
 
-        .hadith-text { font-family: 'Amiri', serif; font-size: 1.5rem; text-align: justify; margin-bottom: 1.5rem; color: #fff; line-height: 2.2; }
-        .hadith-english { font-size: 0.9rem; color: var(--text-secondary); text-align: left; direction: ltr; margin-bottom: 1.5rem; opacity: 0.8; }
-        
+        .hadith-text { 
+            font-family: 'Amiri', serif; font-size: 1.6rem; text-align: justify; 
+            margin-bottom: 1.5rem; color: var(--islamic-green); line-height: 2.3;
+            position: relative; z-index: 1;
+        }
+
         .sanad-box { 
-            background: rgba(212, 175, 55, 0.05); border-right: 3px solid var(--accent-gold);
-            padding: 10px 15px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--accent-gold);
+            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gold-light); padding-bottom: 5px;
+            font-style: italic;
         }
 
         .hadith-footer {
             margin-top: auto; padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center;
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start;
         }
-        .badge { background: rgba(255,255,255,0.05); color: var(--text-secondary); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; }
-        .grade-badge { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: bold; border: 1px solid var(--accent-emerald); }
+        .badge { 
+            background: var(--gold-light); color: var(--islamic-green); 
+            padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
 
-        #load-more-trigger { height: 100px; display: flex; align-items: center; justify-content: center; width: 100%; }
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed; bottom: 30px; left: 30px;
+            background: #25d366; color: white;
+            width: 65px; height: 65px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 10000; transition: var(--transition);
+            text-decoration: none;
+        }
+        .whatsapp-btn:hover { transform: scale(1.1) rotate(10deg); }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #load-more-trigger { height: 120px; display: flex; align-items: center; justify-content: center; width: 100%; }
 
-        .loading-spinner { width: 40px; height: 40px; border: 4px solid var(--glass-border); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-spinner { width: 35px; height: 35px; border: 3px solid #e5e7eb; border-top-color: var(--gold); border-radius: 50%; animation: spin 1s infinite linear; }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <i data-lucide="library"></i>
-            <span>موسوعة<span>الحديث</span></span>
+            <i data-lucide="mosque"></i>
+            <span>موسوعة<span>السنة</span></span>
         </div>
-        <div id="stats" style="color: var(--accent-gold); font-size: 0.9rem;">جاري جرد الموسوعة...</div>
+        <div id="stats" style="font-size: 0.85rem; opacity: 0.9;">تحميل أحاديث المصطفى ﷺ...</div>
     </header>
 
-    <main class="container">
-        <div class="hero">
-            <h1>السُّنَّةُ النَّبَوِيَّةُ المُطَهَّرَةُ</h1>
-            <p style="color: var(--text-secondary);">عرض شامل لكافة الأحاديث والأسانيد والمراجع</p>
-        </div>
+    <section class="hero">
+        <h1>مَوْسُوعَةُ الحَدِيثِ الشَّرِيفِ</h1>
+        <p style="font-size: 1.3rem; opacity: 0.9;">بوابة الأحاديث النبوية والأسانيد الموثقة</p>
+    </section>
 
+    <main class="container">
         <div class="search-box">
-            <i data-lucide="search" style="color: var(--accent-gold);"></i>
-            <input type="text" id="main-search" placeholder="ابحث في المتون، الرواة، أو المواضيع...">
+            <i data-lucide="search" style="color: var(--gold);"></i>
+            <input type="text" id="main-search" placeholder="ابحث في المتون أو المواضيع الفقهية...">
         </div>
 
         <div class="categories-grid" id="cat-list">
-            <div class="cat-card active" data-cat="all"><i data-lucide="layers"></i>الكل</div>
+            <div class="cat-card active" data-cat="all">كافة الكتب</div>
         </div>
 
         <div class="hadith-grid" id="main-grid"></div>
         <div id="load-more-trigger"><div class="loading-spinner"></div></div>
     </main>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/20102891489" class="whatsapp-btn" target="_blank" title="تواصل معنا عبر واتساب">
+        <i data-lucide="message-circle" style="width: 35px; height: 35px;"></i>
+    </a>
 
     <script>
         const catMap = { 'ahmad': 'مسند أحمد', 'bukhari': 'صحيح البخاري', 'muslim': 'صحيح مسلم', 'tirmidhi': 'جامع الترمذي', 'abudawud': 'سنن أبي داود', 'nasai': 'سنن النسائي', 'ibnmajah': 'سنن ابن ماجه', 'malik': 'موطأ مالك' };
@@ -162,10 +194,9 @@
                         const card = document.createElement('div');
                         card.className = 'cat-card';
                         card.dataset.cat = c;
-                        card.innerHTML = `<i data-lucide="book"></i>${catMap[c] || c}`;
+                        card.textContent = catMap[c] || c;
                         catList.appendChild(card);
                     });
-                    lucide.createIcons();
                 }
             } catch(e) {}
         }
@@ -176,15 +207,15 @@
             if (reset) { page = 1; grid.innerHTML = ''; hasMore = true; }
 
             try {
-                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=20`);
+                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=15`);
                 const json = await res.json();
                 if(json.status === 'success') {
-                    if (json.data.length < 20) hasMore = false;
+                    if (json.data.length < 15) hasMore = false;
                     render(json.data);
                     page++;
-                    document.getElementById('stats').textContent = `تم تحميل ${grid.children.length} حديث`;
+                    document.getElementById('stats').textContent = `تم عرض ${grid.children.length} حديث شريف`;
                 }
-            } catch(e) { console.error(e); }
+            } catch(e) {}
             loading = false;
         }
 
@@ -193,13 +224,12 @@
                 const card = document.createElement('div');
                 card.className = 'hadith-card';
                 card.innerHTML = `
-                    <div class="sanad-box"><i data-lucide="user" style="width:14px; margin-left:5px"></i> السند: ${h.chapter}</div>
+                    <div class="sanad-box">عن ${h.chapter}</div>
                     <div class="hadith-text">${h.text}</div>
-                    ${h.english ? `<div class="hadith-english">${h.english}</div>` : ''}
                     <div class="hadith-footer">
-                        <div class="badge"><i data-lucide="bookmark" style="width:12px"></i> ${h.source}</div>
+                        <div class="badge">${h.source}</div>
                         ${h.ref ? `<div class="badge">${h.ref}</div>` : ''}
-                        ${h.grade ? `<div class="badge grade-badge">${h.grade}</div>` : ''}
+                        ${h.grade ? `<div class="badge" style="background:var(--emerald); color:white">${h.grade}</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -207,7 +237,6 @@
             lucide.createIcons();
         }
 
-        // Infinite Scroll Logic
         const observer = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting) loadHadiths();
         }, { threshold: 0.1 });
