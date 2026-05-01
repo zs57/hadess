@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "hadith-platform-premium",
   "builds": [
     {
       "src": "server.js",
@@ -13,12 +12,11 @@
       "dest": "server.js"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/public/assets/$1"
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "/public/index.html"
+      "dest": "public/index.html"
     }
   ]
 }
