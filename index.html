@@ -138,7 +138,7 @@
                     const result = await response.json();
                     if (result.status === 'success') { renderCards(result.data); }
                     else { showError(result.message || "فشل تحميل البيانات"); }
-                } catch (error) { showError("خطأ في الاتصال بالبيانات."); }
+                } catch (error) { showError("خطأ في الاتصال بالسيرفر أو قاعدة البيانات."); }
             }
 
             function renderCards(hadiths) {
