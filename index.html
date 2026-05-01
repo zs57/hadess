@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الحديث الشريف | الإصدار الفاخر</title>
+    <link rel="stylesheet" href="main.css"> <!-- تم تعديل المسار ليكون مباشراً -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header>
+        <div class="nav-content">
+            <div class="logo">
+                <i data-lucide="book-open"></i>
+                <span>منصة<span>الحديث</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section animate-up">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem; color: var(--accent-gold);">كنوز النبوة</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 3rem;">تصفح آلاف الأحاديث النبوية الشريفة بتجربة رقمية فريدة</p>
+        </section>
+
+        <div id="featured-hadith" class="animate-up" style="margin-bottom: 4rem;">
+            <div class="hadith-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(197, 160, 89, 0.1)); border: 1px solid var(--accent-gold);">
+                <div style="color: var(--accent-gold); font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="star"></i> حديث اليوم المختار
+                </div>
+                <div class="hadith-text" id="featured-text">جاري التحميل...</div>
+                <div class="hadith-meta">
+                    <span class="hadith-source" id="featured-source">---</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-container animate-up">
+            <i data-lucide="search" style="color: var(--text-secondary);"></i>
+            <input type="text" id="hadith-search" placeholder="ابحث عن حديث، راوٍ، أو كتاب...">
+        </div>
+
+        <div class="categories-wrapper animate-up" id="categories-container">
+            <div class="category-pill active" data-category="all">الكل</div>
+            <div class="category-pill" data-category="sahih">صحيح البخاري</div>
+            <div class="category-pill" data-category="muslim">صحيح مسلم</div>
+        </div>
+
+        <div class="hadith-grid" id="hadith-results"></div>
+    </main>
+
+    <script src="app.js"></script> <!-- تم تعديل المسار ليكون مباشراً -->
+    <script>lucide.createIcons();</script>
+</body>
+</html>
