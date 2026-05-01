@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة الحديث الشريف | الإصدار الذهبي</title>
+    <title>موسوعة الحديث الشريف | الإصدار الشامل</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Tajawal:wght@300;400;500;700;800;900&display=swap');
@@ -15,7 +15,7 @@
             --accent-emerald: #10b981;
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
-            --glass-bg: rgba(13, 18, 23, 0.8);
+            --glass-bg: rgba(13, 18, 23, 0.9);
             --glass-border: rgba(212, 175, 55, 0.2);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -28,10 +28,9 @@
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.8;
-            overflow-x: hidden;
         }
 
-        .container { max-width: 1300px; margin: 0 auto; padding: 2rem; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
 
         header {
             background: var(--glass-bg);
@@ -49,130 +48,110 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .hero {
-            text-align: center; padding: 6rem 1rem;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-        }
-
-        .hero h1 { font-size: 4rem; margin-bottom: 1.5rem; font-family: 'Amiri', serif; color: var(--accent-gold); text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        .hero { text-align: center; padding: 4rem 1rem 2rem; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-family: 'Amiri', serif; color: var(--accent-gold); }
 
         .search-box {
-            max-width: 800px; margin: -40px auto 4rem;
+            max-width: 800px; margin: 2rem auto 3rem;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 50px; padding: 1.2rem 2.5rem;
+            border-radius: 50px; padding: 1rem 2.5rem;
             display: flex; align-items: center; gap: 1.5rem;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: var(--transition);
         }
-        .search-box:focus-within { transform: scale(1.02); border-color: var(--accent-gold); box-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
         .search-box input { background: transparent; border: none; color: white; width: 100%; font-size: 1.2rem; outline: none; }
 
         .categories-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1.5rem; margin-bottom: 4rem;
+            display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1.5rem; margin-bottom: 3rem;
+            scrollbar-width: none;
         }
+        .categories-grid::-webkit-scrollbar { display: none; }
+        
         .cat-card {
-            background: var(--bg-secondary);
+            flex: 0 0 auto; background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 1.5rem;
-            text-align: center; cursor: pointer;
-            transition: var(--transition);
-            position: relative; overflow: hidden;
+            border-radius: 15px; padding: 0.8rem 1.5rem;
+            cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 8px;
         }
-        .cat-card:hover, .cat-card.active {
-            background: linear-gradient(145deg, #1a3a32, #0d1217);
-            border-color: var(--accent-gold);
-            transform: translateY(-5px);
-        }
-        .cat-card i { font-size: 1.5rem; color: var(--accent-gold); margin-bottom: 10px; }
+        .cat-card.active { background: var(--accent-gold); color: black; border-color: white; }
 
-        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2.5rem; }
+        .hadith-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 2rem; }
+        
         .hadith-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 30px; padding: 2.5rem;
-            position: relative; transition: var(--transition);
+            border-radius: 25px; padding: 2rem;
+            transition: var(--transition);
             display: flex; flex-direction: column;
+            animation: slideUp 0.6s ease forwards;
         }
-        .hadith-card::before {
-            content: '“'; position: absolute; top: 10px; left: 20px;
-            font-size: 5rem; color: var(--accent-gold); opacity: 0.1; font-family: serif;
-        }
-        .hadith-card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--accent-gold); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .hadith-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
-        .hadith-text { font-family: 'Amiri', serif; font-size: 1.6rem; text-align: justify; margin-bottom: 2rem; color: #fff; }
-        .hadith-english { font-size: 0.95rem; color: var(--text-secondary); text-align: left; direction: ltr; margin-bottom: 2rem; border-left: 2px solid var(--accent-gold); padding-left: 1.5rem; }
+        .hadith-text { font-family: 'Amiri', serif; font-size: 1.5rem; text-align: justify; margin-bottom: 1.5rem; color: #fff; line-height: 2.2; }
+        .hadith-english { font-size: 0.9rem; color: var(--text-secondary); text-align: left; direction: ltr; margin-bottom: 1.5rem; opacity: 0.8; }
         
+        .sanad-box { 
+            background: rgba(212, 175, 55, 0.05); border-right: 3px solid var(--accent-gold);
+            padding: 10px 15px; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--accent-gold);
+        }
+
         .hadith-footer {
-            margin-top: auto; padding-top: 1.5rem;
+            margin-top: auto; padding-top: 1rem;
             border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center;
         }
-        .badge { background: rgba(212, 175, 55, 0.1); color: var(--accent-gold); padding: 4px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        .badge { background: rgba(255,255,255,0.05); color: var(--text-secondary); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; }
+        .grade-badge { background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); font-weight: bold; border: 1px solid var(--accent-emerald); }
 
-        .loading-shimmer {
-            background: linear-gradient(90deg, #0d1217 25%, #1a3a32 50%, #0d1217 75%);
-            background-size: 200% 100%; animation: shimmer 1.5s infinite linear;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        #load-more-trigger { height: 100px; display: flex; align-items: center; justify-content: center; width: 100%; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animate { animation: slideIn 0.8s ease forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 10px; }
+        .loading-spinner { width: 40px; height: 40px; border: 4px solid var(--glass-border); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s infinite linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <i data-lucide="shield-check"></i>
-            <span>منصة<span>الحديث</span></span>
+            <i data-lucide="library"></i>
+            <span>موسوعة<span>الحديث</span></span>
         </div>
-        <div style="color: var(--accent-gold); font-weight: bold;">50,000+ حديث شريف</div>
+        <div id="stats" style="color: var(--accent-gold); font-size: 0.9rem;">جاري جرد الموسوعة...</div>
     </header>
 
-    <section class="hero">
-        <h1 class="animate">مَوْسُوعَةُ الحَدِيثِ الشَّرِيفِ</h1>
-        <p class="animate" style="font-size: 1.2rem; color: var(--text-secondary);">البحث الذكي والتصنيف الفاخر للسنة النبوية المطهرة</p>
-    </section>
-
     <main class="container">
-        <div class="search-box animate">
-            <i data-lucide="search" style="color: var(--accent-gold);"></i>
-            <input type="text" id="main-search" placeholder="ابحث في المتون، الرواة، أو الكتب...">
+        <div class="hero">
+            <h1>السُّنَّةُ النَّبَوِيَّةُ المُطَهَّرَةُ</h1>
+            <p style="color: var(--text-secondary);">عرض شامل لكافة الأحاديث والأسانيد والمراجع</p>
         </div>
 
-        <div style="margin-bottom: 1.5rem; font-weight: bold; color: var(--accent-gold);">تصفح حسب الكتاب:</div>
+        <div class="search-box">
+            <i data-lucide="search" style="color: var(--accent-gold);"></i>
+            <input type="text" id="main-search" placeholder="ابحث في المتون، الرواة، أو المواضيع...">
+        </div>
+
         <div class="categories-grid" id="cat-list">
-            <div class="cat-card active" data-cat="all">
-                <i data-lucide="layout-grid"></i>
-                <div>كل الأحاديث</div>
-            </div>
+            <div class="cat-card active" data-cat="all"><i data-lucide="layers"></i>الكل</div>
         </div>
 
         <div class="hadith-grid" id="main-grid"></div>
+        <div id="load-more-trigger"><div class="loading-spinner"></div></div>
     </main>
 
     <script>
-        const catMap = {
-            'ahmad': 'مسند أحمد',
-            'bukhari': 'صحيح البخاري',
-            'muslim': 'صحيح مسلم',
-            'tirmidhi': 'جامع الترمذي',
-            'abudawud': 'سنن أبي داود',
-            'nasai': 'سنن النسائي',
-            'ibnmajah': 'سنن ابن ماجه',
-            'malik': 'موطأ مالك'
-        };
+        const catMap = { 'ahmad': 'مسند أحمد', 'bukhari': 'صحيح البخاري', 'muslim': 'صحيح مسلم', 'tirmidhi': 'جامع الترمذي', 'abudawud': 'سنن أبي داود', 'nasai': 'سنن النسائي', 'ibnmajah': 'سنن ابن ماجه', 'malik': 'موطأ مالك' };
+        
+        let page = 1;
+        let currentCat = 'all';
+        let query = '';
+        let loading = false;
+        let hasMore = true;
 
         const grid = document.getElementById('main-grid');
         const catList = document.getElementById('cat-list');
         const search = document.getElementById('main-search');
-        let currentCat = 'all';
 
         async function fetchCategories() {
             try {
@@ -183,10 +162,7 @@
                         const card = document.createElement('div');
                         card.className = 'cat-card';
                         card.dataset.cat = c;
-                        card.innerHTML = `
-                            <i data-lucide="book"></i>
-                            <div>${catMap[c] || c}</div>
-                        `;
+                        card.innerHTML = `<i data-lucide="book"></i>${catMap[c] || c}`;
                         catList.appendChild(card);
                     });
                     lucide.createIcons();
@@ -194,29 +170,48 @@
             } catch(e) {}
         }
 
-        async function fetchHadiths(q = '') {
-            grid.innerHTML = Array(6).fill('<div class="hadith-card loading-shimmer" style="height:300px"></div>').join('');
+        async function loadHadiths(reset = false) {
+            if (loading || (!hasMore && !reset)) return;
+            loading = true;
+            if (reset) { page = 1; grid.innerHTML = ''; hasMore = true; }
+
             try {
-                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(q)}`);
+                const res = await fetch(`/api/hadiths?category=${currentCat}&q=${encodeURIComponent(query)}&page=${page}&limit=20`);
                 const json = await res.json();
-                if(json.status === 'success') render(json.data);
-            } catch(e) { grid.innerHTML = 'خطأ في التحميل'; }
+                if(json.status === 'success') {
+                    if (json.data.length < 20) hasMore = false;
+                    render(json.data);
+                    page++;
+                    document.getElementById('stats').textContent = `تم تحميل ${grid.children.length} حديث`;
+                }
+            } catch(e) { console.error(e); }
+            loading = false;
         }
 
         function render(data) {
-            if(data.length === 0) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center">لا يوجد نتائج</div>'; return; }
-            grid.innerHTML = data.map((h, i) => `
-                <div class="hadith-card animate" style="animation-delay:${i*0.1}s">
+            data.forEach(h => {
+                const card = document.createElement('div');
+                card.className = 'hadith-card';
+                card.innerHTML = `
+                    <div class="sanad-box"><i data-lucide="user" style="width:14px; margin-left:5px"></i> السند: ${h.chapter}</div>
                     <div class="hadith-text">${h.text}</div>
                     ${h.english ? `<div class="hadith-english">${h.english}</div>` : ''}
                     <div class="hadith-footer">
-                        <div class="badge">${h.source}</div>
-                        <div style="font-size:0.8rem; color:var(--accent-gold)">${h.chapter}</div>
+                        <div class="badge"><i data-lucide="bookmark" style="width:12px"></i> ${h.source}</div>
+                        ${h.ref ? `<div class="badge">${h.ref}</div>` : ''}
+                        ${h.grade ? `<div class="badge grade-badge">${h.grade}</div>` : ''}
                     </div>
-                </div>
-            `).join('');
+                `;
+                grid.appendChild(card);
+            });
             lucide.createIcons();
         }
+
+        // Infinite Scroll Logic
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) loadHadiths();
+        }, { threshold: 0.1 });
+        observer.observe(document.getElementById('load-more-trigger'));
 
         catList.addEventListener('click', e => {
             const card = e.target.closest('.cat-card');
@@ -224,17 +219,16 @@
             document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
             currentCat = card.dataset.cat;
-            fetchHadiths();
+            loadHadiths(true);
         });
 
         let timer;
         search.addEventListener('input', e => {
             clearTimeout(timer);
-            timer = setTimeout(() => fetchHadiths(e.target.value), 600);
+            timer = setTimeout(() => { query = e.target.value; loadHadiths(true); }, 600);
         });
 
         fetchCategories();
-        fetchHadiths();
         lucide.createIcons();
     </script>
 </body>

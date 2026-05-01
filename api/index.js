@@ -58,14 +58,16 @@ app.get('/api/hadiths', async (req, res) => {
       .find(query)
       .sort({ _id: -1 })
       .skip(skip)
-      .limit(parseInt(limit))
+      .limit(parseInt(limit) || 50) // زيادة العدد الافتراضي لـ 50
       .toArray();
 
     const mapped = hadiths.map(h => ({
         text: h.arabic_text || "---",
         english: h.english_text || "",
         source: h.collection + (h.book ? ` - كِتَاب ${h.book}` : ""),
-        chapter: h.narrator || ""
+        chapter: h.narrator || "",
+        grade: Array.isArray(h.grade) ? h.grade.join(' | ') : (h.grade || ""),
+        ref: h.reference ? `رقم: ${h.reference.hadith_number || ""}` : ""
     }));
 
     res.json({ status: 'success', data: mapped });
