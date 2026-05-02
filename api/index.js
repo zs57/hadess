@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
+const firewall = require('./firewall');
 
 const app = express();
 
@@ -8,15 +9,31 @@ const app = express();
 app.use(cors({ maxAge: 86400 }));
 app.use(express.json({ limit: '1mb' }));
 
+// ══════════════════════════════════════════════════
+// 🛡️ تفعيل جدار الحماية — 5 طبقات أمان متتالية
+// ══════════════════════════════════════════════════
+app.use(firewall.securityHeaders);     // Layer 1: رؤوس الأمان الشاملة
+app.use(firewall.botShield);           // Layer 2: حماية من البوتات وأدوات الاختراق
+app.use(firewall.requestFingerprint);  // Layer 3: فحص بصمة الطلب (حجم، عدد، طول)
+app.use(firewall.rateLimiter);         // Layer 4: حد الطلبات مع حظر تلقائي
+app.use(firewall.inputValidator);      // Layer 5: فحص وتنظيف المدخلات
+
+// ─── كاش CDN عالمي ───
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Vary', 'Accept-Encoding');
+  next();
+});
+
 // ─── إعداد قاعدة البيانات مع Connection Pooling احترافي ───
 const uri = "mongodb+srv://zezo411200:zezo4112000@cluster0.9yrl0ey.mongodb.net/sunnah?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
   connectTimeoutMS: 20000,
   socketTimeoutMS: 45000,
-  maxPoolSize: 10,        // عدد الاتصالات المتزامنة المسموحة
-  minPoolSize: 2,         // اتصالات جاهزة دائماً
-  maxIdleTimeMS: 60000,   // إغلاق الاتصال الخامل بعد دقيقة
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  maxIdleTimeMS: 60000,
   family: 4,
   retryWrites: true,
   retryReads: true
@@ -27,7 +44,6 @@ let isConnecting = false;
 
 async function getDatabase() {
   if (cachedDb) return cachedDb;
-  // منع محاولات الاتصال المتزامنة (Thundering Herd Protection)
   if (isConnecting) {
     await new Promise(r => setTimeout(r, 100));
     return getDatabase();
@@ -42,23 +58,18 @@ async function getDatabase() {
   }
 }
 
-// ─── نظام الكاش في الذاكرة (In-Memory Cache) ───
-// يخزن النتائج في ذاكرة السيرفر لتقليل الضغط على MongoDB بنسبة 95%
+// ─── نظام الكاش في الذاكرة ───
 const memoryCache = new Map();
-const CACHE_TTL = 5 * 60 * 1000; // 5 دقائق
+const CACHE_TTL = 5 * 60 * 1000;
 
 function getCached(key) {
   const entry = memoryCache.get(key);
   if (!entry) return null;
-  if (Date.now() - entry.time > CACHE_TTL) {
-    memoryCache.delete(key);
-    return null;
-  }
+  if (Date.now() - entry.time > CACHE_TTL) { memoryCache.delete(key); return null; }
   return entry.data;
 }
 
 function setCache(key, data) {
-  // حماية الذاكرة: حذف أقدم المدخلات إذا تجاوز الكاش 500 مدخل
   if (memoryCache.size > 500) {
     const oldest = memoryCache.keys().next().value;
     memoryCache.delete(oldest);
@@ -66,32 +77,12 @@ function setCache(key, data) {
   memoryCache.set(key, { data, time: Date.now() });
 }
 
-// ─── القائمة الافتراضية كـ Fallback فوري ───
 const defaultCategories = ["ahmad", "bukhari", "muslim", "tirmidhi", "abudawud", "nasai", "ibnmajah", "malik"];
-
-// ─── أسماء الكتب بالعربية لـ SEO ───
 const catNames = {
-  ahmad: 'مسند الإمام أحمد بن حنبل',
-  bukhari: 'صحيح البخاري',
-  muslim: 'صحيح مسلم',
-  tirmidhi: 'جامع الترمذي',
-  abudawud: 'سنن أبي داود',
-  nasai: 'سنن النسائي',
-  ibnmajah: 'سنن ابن ماجه',
-  malik: 'موطأ الإمام مالك'
+  ahmad: 'مسند الإمام أحمد بن حنبل', bukhari: 'صحيح البخاري', muslim: 'صحيح مسلم',
+  tirmidhi: 'جامع الترمذي', abudawud: 'سنن أبي داود', nasai: 'سنن النسائي',
+  ibnmajah: 'سنن ابن ماجه', malik: 'موطأ الإمام مالك'
 };
-
-// ─── Middleware: رؤوس الأداء والأمان ───
-app.use((req, res, next) => {
-  // كاش CDN عالمي: Vercel Edge يخزن النتائج في 30+ موقع حول العالم
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
-  // ضغط المحتوى
-  res.setHeader('Vary', 'Accept-Encoding');
-  // أمان أساسي
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  next();
-});
 
 // ═══════════════════════════════════════════════
 // 📚 API: جلب التصنيفات / الكتب
@@ -210,6 +201,16 @@ app.get('/api/health', (req, res) => {
     cache_size: memoryCache.size,
     timestamp: new Date().toISOString()
   });
+});
+
+// ═══════════════════════════════════════════════
+// 🛡️ API: لوحة تحكم التهديدات (Threat Dashboard)
+// ═══════════════════════════════════════════════
+app.get('/api/threats', (req, res) => {
+  // يفضل حماية هذا المسار بكلمة مرور أو توكن (Token) في بيئة الإنتاج
+  // لكن لأغراض هذا المشروع، سنعرض الإحصائيات مع إخفاء بعض تفاصيل الـ IP للحماية
+  const stats = firewall.getThreatDashboard();
+  res.json(stats);
 });
 
 module.exports = app;
